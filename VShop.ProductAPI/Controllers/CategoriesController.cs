@@ -2,11 +2,11 @@
 
 namespace VShop.ProductAPI.Controllers
 {
-    public class CategoriesController : Controller
+
+    [Route("api/[controller]")]
+    [ApiController]
+    public class CategoriesController : ControllerBase
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+
     }
 }
