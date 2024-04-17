@@ -7,8 +7,8 @@ namespace VShop.ProductAPI.Repositories
         Task<IEnumerable<Product>> GetAll();
         Task<IEnumerable<Product>> GetCategoriesProducts();
         Task<Product> GetById(int id);
-        Task<Product> Create(Product Product);
-        Task<Product> Update(Product Product);
+        Task<Product> Create(Product product);
+        Task<Product> Update(Product product);
         Task<Product> Delete(int id);
     }
 }

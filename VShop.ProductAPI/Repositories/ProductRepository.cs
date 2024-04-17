@@ -4,7 +4,7 @@ using VShop.ProductAPI.Models;
 
 namespace VShop.ProductAPI.Repositories
 {
-    public class ProductRepository
+    public class ProductRepository : IProductRepository
     {
         private readonly AppDbContext _context;
 
@@ -13,41 +13,41 @@ namespace VShop.ProductAPI.Repositories
             _context = context;
         }
 
-        public async Task<Category> Create(Category category)
+        public async Task<Product> Create(Product product)
         {
-            _context.Categories.Add(category);
+            _context.Products.Add(product);
             await _context.SaveChangesAsync();
-            return category;
+            return product;
         }
 
-        public async Task<Category> Delete(int id)
+        public async Task<Product> Delete(int id)
         {
-            var cat = await GetById(id);
-            _context.Categories.Remove(cat);
+            var prod = await GetById(id);
+            _context.Products.Remove(prod);
             await _context.SaveChangesAsync();
-            return cat;
+            return prod;
         }
 
-        public async Task<IEnumerable<Category>> GetAll()
+        public async Task<IEnumerable<Product>> GetAll()
         {
-            return await _context.Categories.ToListAsync();
+            return await _context.Products.ToListAsync();
         }
 
-        public async Task<Category> GetById(int id)
+        public async Task<Product> GetById(int id)
         {
-            return await _context.Categories.Where(c => c.Id == id).FirstOrDefaultAsync();
+            return await _context.Products.Where(p => p.Id == id).FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Category>> GetCategoriesProducts()
+        public Task<IEnumerable<Product>> GetCategoriesProducts()
         {
-            return await _context.Categories.Include(c => c.Products).ToListAsync();
+            throw new NotImplementedException();
         }
 
-        public async Task<Category> Update(Category category)
+        public async Task<Product> Update(Product product)
         {
-            _context.Entry(category).State = EntityState.Modified;
+            _context.Entry(product).State = EntityState.Modified;
             await _context.SaveChangesAsync();
-            return category;
+            return product;
         }
     }
 }
