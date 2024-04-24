@@ -1,3 +1,5 @@
+using Keycloak.AuthServices.Authentication;
+using Keycloak.AuthServices.Authorization;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 using VShop.ProductAPI.Context;
@@ -15,11 +17,28 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer("Dat
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+var authenticationOptions = builder
+                            .Configuration
+                            .GetSection(KeycloakAuthenticationOptions.Section)
+                            .Get<KeycloakAuthenticationOptions>();
+
+builder.Services.AddKeycloakAuthentication(authenticationOptions);
+
+var authorizationOptions = builder
+                            .Configuration
+                            .GetSection(KeycloakProtectionClientOptions.Section)
+                            .Get<KeycloakProtectionClientOptions>();
+
+builder.Services.AddKeycloakAuthorization(authorizationOptions);
+
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IProductService, ProductService>();
+
+
 
 
 var app = builder.Build();
@@ -33,6 +52,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
