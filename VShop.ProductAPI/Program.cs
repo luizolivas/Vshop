@@ -18,19 +18,19 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-var authenticationOptions = builder
-                            .Configuration
-                            .GetSection(KeycloakAuthenticationOptions.Section)
-                            .Get<KeycloakAuthenticationOptions>();
+//var authenticationOptions = builder
+//                            .Configuration
+//                            .GetSection(KeycloakAuthenticationOptions.Section)
+//                            .Get<KeycloakAuthenticationOptions>();
 
-builder.Services.AddKeycloakAuthentication(authenticationOptions);
+//builder.Services.AddKeycloakAuthentication(authenticationOptions);
 
-var authorizationOptions = builder
-                            .Configuration
-                            .GetSection(KeycloakProtectionClientOptions.Section)
-                            .Get<KeycloakProtectionClientOptions>();
+//var authorizationOptions = builder
+//                            .Configuration
+//                            .GetSection(KeycloakProtectionClientOptions.Section)
+//                            .Get<KeycloakProtectionClientOptions>();
 
-builder.Services.AddKeycloakAuthorization(authorizationOptions);
+//builder.Services.AddKeycloakAuthorization(authorizationOptions);
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
@@ -52,7 +52,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication();
+//app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

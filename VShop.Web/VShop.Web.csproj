@@ -10,4 +10,8 @@
     <Folder Include="wwwroot\image\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="IdentityModel.OidcClient" Version="6.0.0" />
+  </ItemGroup>
+
 </Project>

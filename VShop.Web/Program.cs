@@ -13,6 +13,16 @@ builder.Services.AddHttpClient("ProductApi", c =>
 
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+//builder.Services.AddScoped<LoginService>();
+
+builder.Services.AddHttpClient();
+
+builder.Services.AddScoped<LoginService>(sp =>
+        new LoginService(sp.GetRequiredService<IHttpContextAccessor>(),
+                                "http://localhost:8080/realms/caelid", // Base URL do Keycloak
+                                "caelid-api",       // Seu clientId
+                                "https://localhost:7097/"));
 
 var app = builder.Build();
 
