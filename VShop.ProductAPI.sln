@@ -11,8 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Frontend", "Frontend", "{A1
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Backend", "Backend", "{6C4A8273-C627-4FE3-9B7B-1F4A32CF2FA7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyCloak.Auth.API", "KeyCloak.Auth.API\KeyCloak.Auth.API.csproj", "{CC6D3427-633D-493C-A15F-886F9CF7C2F0}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,10 +25,6 @@ Global
 		{ED14B4BA-B044-4121-A48E-4B8D829B354B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED14B4BA-B044-4121-A48E-4B8D829B354B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ED14B4BA-B044-4121-A48E-4B8D829B354B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CC6D3427-633D-493C-A15F-886F9CF7C2F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CC6D3427-633D-493C-A15F-886F9CF7C2F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CC6D3427-633D-493C-A15F-886F9CF7C2F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CC6D3427-633D-493C-A15F-886F9CF7C2F0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

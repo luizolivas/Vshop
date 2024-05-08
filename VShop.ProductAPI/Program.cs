@@ -1,6 +1,9 @@
 using Keycloak.AuthServices.Authentication;
 using Keycloak.AuthServices.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using System.Text.Json.Serialization;
 using VShop.ProductAPI.Context;
 using VShop.ProductAPI.Repositories;
@@ -18,19 +21,26 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-//var authenticationOptions = builder
-//                            .Configuration
-//                            .GetSection(KeycloakAuthenticationOptions.Section)
-//                            .Get<KeycloakAuthenticationOptions>();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.Authority = "http://localhost:8080/realms/caelid"; // O issuer
+        options.Audience = "caelid-api"; // O audience
+        options.RequireHttpsMetadata = false; // Desabilitar verificação de HTTPS temporariamente para desenvolvimento
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ClockSkew = TimeSpan.Zero // opcional, para remover a margem de segurança
+        };
+    });
 
-//builder.Services.AddKeycloakAuthentication(authenticationOptions);
 
-//var authorizationOptions = builder
-//                            .Configuration
-//                            .GetSection(KeycloakProtectionClientOptions.Section)
-//                            .Get<KeycloakProtectionClientOptions>();
+builder.Services.AddAuthentication();
+builder.Services.AddAuthorization();
 
-//builder.Services.AddKeycloakAuthorization(authorizationOptions);
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
@@ -52,7 +62,28 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-//app.UseAuthentication();
+app.Use(async (context, next) =>
+{
+    var request = context.Request;
+
+    Console.WriteLine($"Recebida solicitação: {request.Method} {request.Path}");
+
+    var authorizationHeader = request.Headers["Authorization"].FirstOrDefault();
+
+    if (!string.IsNullOrEmpty(authorizationHeader))
+    {
+        var token = authorizationHeader.Split(" ").Last();
+        Console.WriteLine($"Token JWT recebido: {token}");
+    }
+    else
+    {
+        Console.WriteLine("Nenhum cabeçalho de autorização encontrado na solicitação.");
+    }
+
+    await next();
+});
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

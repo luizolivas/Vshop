@@ -13,11 +13,9 @@ namespace VShop.Web.Controllers
             _loginService = loginService;
         }
 
-        // Endpoint para iniciar o fluxo de autorização
         public void Login()
         {
             _loginService.StartAuthorizationFlow();
-
         }
     }
 }

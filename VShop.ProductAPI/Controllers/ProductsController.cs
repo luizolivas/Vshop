@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using VShop.ProductAPI.DTOs;
 using VShop.ProductAPI.Services;
 
@@ -13,7 +14,9 @@ namespace VShop.ProductApi.Controllers
         {
             _productService = productService;
         }
+
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<ProductDTO>>> Get()
         {
             var produtosDto = await _productService.GetProducts();
