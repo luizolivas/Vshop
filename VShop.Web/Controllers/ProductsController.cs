@@ -5,6 +5,7 @@ using VShop.Web.Services.Contracts;
 
 namespace VShop.Web.Controllers
 {
+
     public class ProductsController : Controller
     {
         private readonly IProductService _productService;

@@ -1,4 +1,4 @@
-namespace KeyCloak.Auth.API
+namespace KeyCloakAuth
 {
     public class WeatherForecast
     {

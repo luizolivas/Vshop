@@ -4,10 +4,10 @@ namespace VShop.Web.Models
 {
     public class LoginViewModel
     {
-        [Required]
-        public string? username { get; set; }
+        [Required(ErrorMessage = "O campo {0} é obrigatório.")]
+        public string Username { get; set; }
 
-        [Required]
-        public string? password { get; set; }
+        [Required(ErrorMessage = "O campo {0} é obrigatório.")]
+        public string Password { get; set; }
     }
 }

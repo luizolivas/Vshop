@@ -37,7 +37,8 @@ namespace VShop.Web.Services
                 $"&state={state}";
 
             // Adicione a URI de redirecionamento à URL de login
-            var redirectUri = "https://localhost:7097/CallbackKeycloak";
+            var redirectUri = "https://localhost:7051/api/CallbackKeycloak/test";
+            //var redirectUri = "https://localhost:7097";
             keycloakLoginUrl += $"&redirect_uri={redirectUri}";
 
             // Redirecionar o usuário para a página de login do Keycloak
@@ -49,39 +50,33 @@ namespace VShop.Web.Services
         {
             try
             {
-                // Construir a URL do endpoint de token do Keycloak
                 var tokenEndpoint = $"{_keycloakBaseUrl}/protocol/openid-connect/token";
 
-                // Montar os parâmetros da solicitação
                 var parameters = new Dictionary<string, string>
                 {
                     { "grant_type", "authorization_code" },
                     { "client_id", _clientId },
-                    { "code", code },
-                    { "redirect_uri", "https://localhost:7097/Login/KeycloakCallback" } // Adicione o URI de redirecionamento, se necessário
+                    { "client_secret", _clientSecret },
+                    { "code", code }
                 };
 
-                // Fazer solicitação POST para trocar o código de autorização por tokens de acesso
                 using (var client = new HttpClient())
                 {
                     var response = await client.PostAsync(tokenEndpoint, new FormUrlEncodedContent(parameters));
                     if (response.IsSuccessStatusCode)
                     {
-                        // Ler e desserializar a resposta
                         var content = await response.Content.ReadAsStringAsync();
                         var tokens = JsonSerializer.Deserialize<TokenResponse>(content);
                         return tokens;
                     }
                     else
                     {
-                        // Lidar com erros de solicitação
                         throw new Exception($"Failed to exchange code for tokens: {response.ReasonPhrase}");
                     }
                 }
             }
             catch (Exception ex)
             {
-                // Lidar com exceções
                 throw new Exception("Failed to exchange code for tokens", ex);
             }
         }

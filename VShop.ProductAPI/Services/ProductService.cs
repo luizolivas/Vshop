@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Caching.Distributed;
 using VShop.ProductAPI.DTOs;
 using VShop.ProductAPI.Models;
 using VShop.ProductAPI.Repositories;
@@ -9,11 +10,13 @@ namespace VShop.ProductAPI.Services
     {
         private readonly IProductRepository _productRepository;
         private readonly IMapper _mapper;
+        private readonly IDistributedCache _cache;
 
-        public ProductService(IProductRepository productRepository, IMapper mapper)
+        public ProductService(IProductRepository productRepository, IMapper mapper, IDistributedCache cache)
         {
             _productRepository = productRepository;
             _mapper = mapper;
+            _cache = cache; 
         }
 
         public async Task AddProduct(ProductDTO ProductDTO)
@@ -31,8 +34,16 @@ namespace VShop.ProductAPI.Services
 
         public async Task<IEnumerable<ProductDTO>> GetProducts()
         {
-            var productsEntity = await _productRepository.GetAll();
-            return _mapper.Map<IEnumerable<ProductDTO>>(productsEntity);
+            try
+            {
+                var productsEntity = await _productRepository.GetAll();
+                return _mapper.Map<IEnumerable<ProductDTO>>(productsEntity);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
         }
 
         public async Task<IEnumerable<ProductDTO>> GetCategoriesProducts()

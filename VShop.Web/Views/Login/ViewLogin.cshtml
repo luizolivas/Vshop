@@ -8,12 +8,14 @@
 
 <form asp-controller="Login" asp-action="Login" method="post">
     <div>
-        <label for="UserName">Username:</label>
+        <label for="username">Username:</label>
         <input type="text" id="username" name="username" />
+        <span asp-validation-for="Username"></span>
     </div>
     <div>
-        <label for="Password">Password:</label>
+        <label for="password">Password:</label>
         <input type="password" id="password" name="password" />
+        <span asp-validation-for="Password"></span>
     </div>
     <div>
         <button type="submit">Login</button>
