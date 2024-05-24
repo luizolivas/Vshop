@@ -16,7 +16,6 @@ namespace VShop.ProductApi.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public async Task<ActionResult<IEnumerable<ProductDTO>>> Get()
         {
             var produtosDto = await _productService.GetProducts();

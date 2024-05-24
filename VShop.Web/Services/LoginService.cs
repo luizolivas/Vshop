@@ -1,6 +1,7 @@
 ﻿using IdentityModel.Client;
 using Microsoft.AspNetCore.Http;
 using System.Text.Json;
+using VShop.Web.Services.Contracts;
 
 
 namespace VShop.Web.Services
@@ -10,14 +11,32 @@ namespace VShop.Web.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly string _keycloakBaseUrl;
         private readonly string _clientId;
-        private readonly string _clientSecret; // Se você tiver um segredo de cliente
+        private readonly string _clientSecret; 
+        private readonly ITokenService _tokenService;
+        private readonly ILogoutService _logoutService;
 
-        public LoginService(IHttpContextAccessor httpContextAccessor, string keycloakBaseUrl, string clientId, string clientSecret)
+        public LoginService(IHttpContextAccessor httpContextAccessor, string keycloakBaseUrl, string clientId, string clientSecret, ITokenService tokenService, ILogoutService logoutService)
         {
             _httpContextAccessor = httpContextAccessor;
             _keycloakBaseUrl = keycloakBaseUrl;
             _clientId = clientId;
             _clientSecret = clientSecret;
+            _tokenService = tokenService;
+            _logoutService = logoutService;
+        }
+
+        public async Task<bool> LoginLogout()
+        {
+            if (!await _tokenService.IsTokenValid())
+            {
+                StartAuthorizationFlow();
+                return false;
+            }
+            else
+            {
+                await _logoutService.Desloga();
+                return true;
+            }
         }
 
         // Método para iniciar o fluxo de autorização com Keycloak

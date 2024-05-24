@@ -9,8 +9,6 @@ namespace KeyCloakAuth.Services
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        private string retriedCode;
-
         private readonly IDistributedCache _cache;
 
         public CallbackKeycloakService(IHttpContextAccessor httpContextAccessor, IDistributedCache cache)

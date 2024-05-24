@@ -13,9 +13,20 @@ namespace VShop.Web.Controllers
             _loginService = loginService;
         }
 
-        public void Login()
+        public async Task<IActionResult> Login()
         {
-            _loginService.StartAuthorizationFlow();
+            bool isLoggedOut = await _loginService.LoginLogout();
+
+            if (isLoggedOut)
+            {
+                // Usuário foi deslogado, redirecione para a Home
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                // Usuário foi redirecionado para o login, não faça nada
+                return new EmptyResult();
+            }
         }
     }
 }

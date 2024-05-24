@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using System.Security.Cryptography;
 using VShop.Web.Services;
 using VShop.Web.Services.Contracts;
 
@@ -16,6 +16,8 @@ builder.Services.AddHttpClient("ProductApi", c =>
 
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddSingleton<ITokenService,TokenService>();
+builder.Services.AddScoped<ILogoutService, LogoutService>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 // Adicionar o serviço de sessão
@@ -26,13 +28,12 @@ builder.Services.AddScoped<LoginService>(sp =>
     new LoginService(sp.GetRequiredService<IHttpContextAccessor>(),
                             "http://localhost:8080/realms/caelid", // Base URL do Keycloak
                             "caelid-api",       // Seu clientId
-                            "https://localhost:7097/"));
+                            "https://localhost:7097/", sp.GetRequiredService<ITokenService>(), sp.GetRequiredService<ILogoutService>()));
 
 builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration = "localhost:6379";
 });
-
 
 // Configuração do JWT Bearer
 builder.Services.AddAuthentication(options =>
@@ -51,9 +52,13 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuer = true,
         ValidateAudience = true,
         ValidateLifetime = true,
+        ValidIssuer = "http://localhost:8080/realms/caelid",
+        ValidAudience = "caelid-api"
     };
 });
+
 builder.Services.AddAuthorization();
+
 var app = builder.Build();
 
 // Configurar o serviço de sessão
@@ -63,7 +68,6 @@ app.UseSession();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
