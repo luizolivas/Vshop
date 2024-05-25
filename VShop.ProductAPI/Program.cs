@@ -17,21 +17,6 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer("Dat
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
-//var authenticationOptions = builder
-//                            .Configuration
-//                            .GetSection(KeycloakAuthenticationOptions.Section)
-//                            .Get<KeycloakAuthenticationOptions>();
-
-//builder.Services.AddKeycloakAuthentication(authenticationOptions);
-
-//var authorizationOptions = builder
-//                            .Configuration
-//                            .GetSection(KeycloakProtectionClientOptions.Section)
-//                            .Get<KeycloakProtectionClientOptions>();
-
-//builder.Services.AddKeycloakAuthorization(authorizationOptions);
-
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
